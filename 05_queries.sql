@@ -1,29 +1,4 @@
--- 05_queries.sql
--- Consultas Complejas para EduTech Plus
-
 -- 1. Obtener el listado de estudiantes cuyo promedio general sea superior al promedio general de TODOS los estudiantes.
-WITH PromediosPorEstudiante AS (
-    SELECT 
-        m.estudiante_id,
-        AVG(c.valor) as promedio_individual
-    FROM matriculas m
-    JOIN calificaciones c ON m.id = c.matricula_id
-    GROUP BY m.estudiante_id
-),
-PromedioGlobal AS (
-    SELECT AVG(promedio_individual) as promedio_todos FROM PromediosPorEstudiante
-)
-SELECT 
-    e.nombre,
-    e.apellido,
-    ppe.promedio_individual
-FROM enlaces e
-JOIN PromediosPorEstudiante ppe ON e.id = ppe.estudiante_id
-cross join PromedioGlobal pg
-WHERE ppe.promedio_individual > pg.promedio_todos;
--- Corrección: "enlaces" no existe, es "estudiantes".
-
--- CORREGIDO CONSULTA 1:
 WITH PromediosPorEstudiante AS (
     SELECT 
         m.estudiante_id,
@@ -100,17 +75,14 @@ GROUP BY e.id, c.id, pa.id, m.estado, m.id;
 
 
 -- 7. Estudiantes que han aprobado TODOS los cursos matriculados.
--- (Asumiendo aprobación si promedio notas > 3.0 por matricula)
 SELECT 
     e.nombre,
     e.apellido
 FROM estudiantes e
 WHERE NOT EXISTS (
-    -- Subconsulta busca si existe ALGUNA matrícula reprobada
-    -- Para este ejemplo, reprobado es nota < 3.0 o estado 'Reprobado'
     SELECT 1 
     FROM matriculas m
-    LEFT JOIN calificaciones cal ON m.id = cal.matricula_id -- simplificando: tomamos notas individuales promedio
+    LEFT JOIN calificaciones cal ON m.id = cal.matricula_id 
     WHERE m.estudiante_id = e.id
     GROUP BY m.id
     HAVING AVG(COALESCE(cal.valor, 0)) < 3.0
@@ -157,3 +129,4 @@ SELECT
 FROM periodos_academicos pa
 JOIN IngresosPorPeriodo ipp ON pa.id = ipp.periodo_id
 WHERE ipp.total > (SELECT media_historica FROM PromedioIngresos);
+
