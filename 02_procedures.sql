@@ -1,6 +1,3 @@
--- 02_procedures.sql
--- Procedimientos Almacenados para EduTech Plus (PostgreSQL PL/pgSQL)
-
 -- 1. Registrar un nuevo estudiante
 CREATE OR REPLACE PROCEDURE registrar_estudiante(
     p_documento VARCHAR,
@@ -105,8 +102,7 @@ BEGIN
 END;
 $$;
 
--- 4. Calcular promedio académico (Función, ya que devuelve valor, aunque el usuario pidió SP que "retorne", en PG los SP no retornan data igual que funciones, pero usaremos PROCEDURE con parámetro INOUT o simplemente una FUNCTION que es más natural para "calcular y retornar")
--- Nota: El requerimiento dice "Procedimiento... Calcula y retorna". En PG un PROCEDURE puede tener parámetros INOUT.
+-- 4. Calcular promedio académico
 CREATE OR REPLACE PROCEDURE calcular_promedio_estudiante(
     IN p_estudiante_id INT,
     INOUT p_promedio DECIMAL
@@ -137,8 +133,7 @@ BEGIN
         RAISE EXCEPTION 'Ya existe un certificado de notas para este estudiante en el periodo %.', p_periodo_id;
     END IF;
 
-    -- Contar cursos aprobados (asumiendo nota >= 3.0 para aprobar, se podría hacer más complejo)
-    -- Aquí simplificamos: se emite certificado si tiene al menos 1 curso con nota final >= 3
+    -- Contar cursos aprobados
     SELECT COUNT(*) INTO v_cursos_aprobados
     FROM matriculas m
     JOIN calificaciones c ON m.id = c.matricula_id
@@ -156,3 +151,4 @@ BEGIN
     RAISE NOTICE 'Certificación generada para estudiante ID %.', p_estudiante_id;
 END;
 $$;
+
