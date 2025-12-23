@@ -1,6 +1,3 @@
--- 04_views.sql
--- Vistas para EduTech Plus
-
 -- 1. Vista de estudiantes con su programa académico
 CREATE OR REPLACE VIEW vista_estudiantes_programa AS
 SELECT 
@@ -55,3 +52,4 @@ FROM pagos p
 JOIN estudiantes e ON p.estudiante_id = e.id
 JOIN periodos_academicos pa ON p.periodo_id = pa.id
 GROUP BY e.id, e.nombre, e.apellido, pa.nombre;
+
