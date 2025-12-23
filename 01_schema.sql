@@ -1,8 +1,3 @@
--- 01_schema.sql
--- Script de creación del esquema para EduTech Plus (PostgreSQL)
-
--- Crear tablas dimensión / maestras primero
-
 CREATE TABLE programas_academicos (
     id SERIAL PRIMARY KEY,
     codigo VARCHAR(20) UNIQUE NOT NULL,
@@ -53,9 +48,6 @@ CREATE TABLE cursos (
     cupo_maximo INT DEFAULT 30
 );
 
--- Tablas transaccionales / intermedias
-
--- Un docente puede dar un curso en un periodo específico (Asignación académica)
 CREATE TABLE asignaciones_docentes (
     id SERIAL PRIMARY KEY,
     docente_id INT REFERENCES docentes(id),
@@ -124,3 +116,4 @@ CREATE TABLE auditoria (
     datos_nuevos JSONB,
     descripcion TEXT
 );
+
