@@ -1,6 +1,3 @@
--- 03_triggers.sql
--- Triggers para EduTech Plus
-
 -- 1. Trigger de Auditoría de Matrículas
 CREATE OR REPLACE FUNCTION auditar_matricula_func() RETURNS TRIGGER AS $$
 BEGIN
@@ -21,7 +18,7 @@ CREATE TRIGGER trg_audto_matriculas
 AFTER INSERT OR UPDATE OR DELETE ON matriculas
 FOR EACH ROW EXECUTE FUNCTION auditar_matricula_func();
 
--- 2. Trigger Validación Calificación (Aunque ya tenemos constraint CHECK, el usuario pidió trigger explícito)
+-- 2. Trigger Validación Calificación
 CREATE OR REPLACE FUNCTION validar_calificacion_func() RETURNS TRIGGER AS $$
 BEGIN
     IF NEW.valor < 0 OR NEW.valor > 5 THEN
@@ -36,8 +33,6 @@ BEFORE INSERT OR UPDATE ON calificaciones
 FOR EACH ROW EXECUTE FUNCTION validar_calificacion_func();
 
 -- 3. Trigger Actualizar estado financiero (Simulación)
--- Supongamos que si paga completo un monto X, se marca algo o simplemente se loguea.
--- Vamos a hacer algo útil: Si el pago es recibido, registrar en auditoría financiera específica.
 CREATE OR REPLACE FUNCTION auditar_pago_func() RETURNS TRIGGER AS $$
 BEGIN
     INSERT INTO auditoria (tabla_afectada, accion, descripcion, datos_nuevos)
@@ -49,3 +44,4 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_pago_recibido
 AFTER INSERT ON pagos
 FOR EACH ROW EXECUTE FUNCTION auditar_pago_func();
+
