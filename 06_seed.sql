@@ -1,6 +1,3 @@
--- 06_seed.sql
--- Datos de prueba para EduTech Plus
-
 -- Programas
 INSERT INTO programas_academicos (codigo, nombre, nivel, duracion_semestres) VALUES
 ('ING-SIS', 'Ingeniería de Sistemas', 'Pregrado', 10),
@@ -65,7 +62,6 @@ INSERT INTO estudiantes (documento, nombre, apellido, correo, programa_id) VALUE
 ('1019', 'Gabriel', 'Marquez', 'gabriel.mar@mail.com', 3),
 ('1020', 'Julio', 'Cortazar', 'julio.cor@mail.com', 4);
 
--- Matriculas (Algunos ejemplos)
 -- Matricular a Juan (1) en Intro Prog (1) periodo 2
 INSERT INTO matriculas (estudiante_id, curso_id, periodo_id) VALUES (1, 1, 2);
 -- Matricular a Maria (2) en Estructuras (2) periodo 2
@@ -89,3 +85,4 @@ INSERT INTO pagos (estudiante_id, periodo_id, monto, concepto, metodo_pago) VALU
 (1, 2, 1000.00, 'Matricula Semestre', 'Tarjeta'),
 (2, 2, 1000.00, 'Matricula Semestre', 'Efectivo'),
 (8, 2, 2500.00, 'Matricula Maestria', 'Transferencia');
+
